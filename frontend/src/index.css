@@ -1,0 +1,561 @@
+@import 'leaflet/dist/leaflet.css';
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Syne:wght@300;400;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --hero: #1E3D2B;
+  --hero-mid: #2A5240;
+  --parchment: #F7F4EE;
+  --parchment-dark: #EDE8DE;
+  --surface: #FFFFFF;
+  --emerald: #1A6B47;
+  --emerald-light: #E8F5EE;
+  --gold: #C9983A;
+  --gold-light: #EDD07A;
+  --ink: #1C1C1A;
+  --ink-muted: #6E6B65;
+  --ink-faint: #AEAAA3;
+  --border: #E2DCCE;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background-color: var(--parchment);
+  color: var(--ink);
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .serif {
+  font-family: 'Cormorant Garant', serif;
+}
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-up { animation: fadeUp 0.55s ease forwards; opacity: 0; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+
+.hero-title  { animation: fadeUp 0.6s ease 0s   forwards; opacity: 0; }
+.hero-sub    { animation: fadeUp 0.6s ease 0.2s forwards; opacity: 0; }
+.hero-cta    { animation: fadeUp 0.6s ease 0.4s forwards; opacity: 0; }
+.hero-eyebrow { animation: fadeIn 0.5s ease 0s  forwards; opacity: 0; }
+
+/* ── Nav link underline ── */
+.nav-link {
+  position: relative;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1.5px;
+  background: var(--gold);
+  transition: width 0.25s ease;
+}
+.nav-link:hover { color: var(--hero); }
+.nav-link:hover::after { width: 100%; }
+
+/* ── Buttons ── */
+.btn-gold {
+  background: var(--gold);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.03em;
+  padding: 0.75rem 2rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-gold:hover { background: #b8882e; transform: translateY(-1px); }
+
+.btn-forest {
+  background: var(--hero);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.03em;
+  padding: 0.75rem 2rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-forest:hover { background: var(--hero-mid); transform: translateY(-1px); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--hero);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.7rem 1.75rem;
+  border: 1.5px solid var(--hero);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover { background: var(--hero); color: white; }
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.7rem 1.75rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.08); }
+
+.btn-danger {
+  background: transparent;
+  color: #c0392b;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e8c5c0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-danger:hover { background: #c0392b; color: white; }
+
+/* ── Inputs ── */
+.input-field {
+  width: 100%;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.65rem 0.875rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  border-radius: 0;
+}
+.input-field:focus {
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 3px rgba(26,107,71,0.08);
+}
+
+/* ── Labels ── */
+.field-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+/* ── Section eyebrow ── */
+.eyebrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.eyebrow-green {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--emerald);
+}
+
+/* ── Page header (dark hero bar) ── */
+.page-header {
+  background: var(--hero);
+  padding: 3.5rem 2.5rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.page-header-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+.page-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.page-header h1 {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: white;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.page-header .eyebrow {
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* ── Cards ── */
+.dest-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+.dest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(30,61,43,0.1);
+}
+.dest-card-img {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+.dest-card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.dest-card:hover .dest-card-img img { transform: scale(1.05); }
+.dest-card-badge {
+  position: absolute;
+  bottom: 0.6rem; left: 0.6rem;
+  background: var(--hero);
+  color: white;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+}
+.dest-card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.dest-card-name {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.dest-card-desc {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--ink-muted);
+    margin-top: 0.4rem;
+    line-height: 1.65;
+    flex: 1;
+}
+
+.dest-card-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+.dest-card-stat {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+.dest-card-stat span {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--emerald);
+}
+.dest-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ── Trip rows ── */
+.trip-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.2s;
+  margin-bottom: 0.75rem;
+}
+.trip-row:hover {
+  background: var(--parchment);
+  transform: translateX(4px);
+}
+.trip-row-num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 2.5rem;
+  color: var(--parchment-dark);
+  line-height: 1;
+  width: 3rem;
+  flex-shrink: 0;
+}
+.trip-row-name {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+.trip-row-meta {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  margin-top: 0.2rem;
+}
+.trip-row-meta b {
+  color: var(--emerald);
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+.trip-row-cost {
+  margin-left: auto;
+  text-align: right;
+}
+.trip-row-cost-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.trip-row-cost-val {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--ink);
+}
+
+/* ── Modal overlay ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 25, 18, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  backdrop-filter: blur(2px);
+}
+.modal-box {
+  background: var(--surface);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 480px;
+  margin: 1rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.modal-title {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--ink);
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ink-faint);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25rem;
+}
+.modal-close:hover { color: var(--ink); }
+
+/* ── Activity cards ── */
+.activity-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--emerald);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  transition: background 0.15s;
+}
+.activity-card:hover { background: var(--parchment); }
+.activity-icon { font-size: 1.5rem; flex-shrink: 0; }
+.activity-name {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+.activity-meta {
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: var(--ink-muted);
+  margin-top: 0.15rem;
+}
+.activity-price {
+  margin-left: auto;
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--emerald);
+  white-space: nowrap;
+}
+.activity-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* ── Day heading ── */
+.day-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.75rem 0 0.75rem;
+}
+.day-badge {
+  background: var(--hero);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+}
+.day-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Form grid ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-grid-full { grid-column: 1 / -1; }
+.form-field { display: flex; flex-direction: column; }
+
+/* ── Stars ── */
+.stars { color: var(--gold); letter-spacing: 0.1em; }
+
+/* ── Loading ── */
+.loading-screen {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loading-text {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--ink-muted);
+}
+
+/* ── Error text ── */
+.error-msg {
+  font-size: 0.82rem;
+  color: #c0392b;
+  background: #fdf0ee;
+  border-left: 3px solid #c0392b;
+  padding: 0.6rem 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Success msg ── */
+.success-msg {
+  font-size: 0.82rem;
+  color: var(--emerald);
+  background: var(--emerald-light);
+  border-left: 3px solid var(--emerald);
+  padding: 0.6rem 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Reco card ── */
+.reco-card {
+  background: var(--surface);
+  border: 1px solid rgba(26,107,71,0.15);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.reco-card:hover { transform: translateY(-3px); }
+.reco-card-img { height: 110px; overflow: hidden; }
+.reco-card-img img { width:100%; height:100%; object-fit:cover; }
+.reco-card-body { padding: 0.875rem; }
+.reco-card-name {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+.reco-card-country {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--emerald);
+  margin-top: 0.2rem;
+  letter-spacing: 0.04em;
+}
