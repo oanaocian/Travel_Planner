@@ -28,9 +28,14 @@ const Favourites = () => {
         fetchData();
     }, []);
 
-    const handleRemove = async (id) => {
+    const handleRemove = async (e, id) => {
+        e.stopPropagation();
         await favouritesService.remove(id);
         setFavourites(favourites.filter(f => f.id !== id));
+    }
+
+    const handleCardClick = (destinationId) => {
+        navigate(`/destinations?highlight=${destinationId}`);
     }
 
     if (loading) return (
@@ -81,11 +86,13 @@ const Favourites = () => {
                     }}>
                         {favourites.map((favourite, i) => (
                             <div key={favourite.id}
+                                onClick={() => handleCardClick(favourite.destination_id)}
                                 className={`animate-fade-up delay-${Math.min(i + 1, 6)}`}
                                 style={{
                                     background: 'var(--surface)',
                                     border: '1px solid var(--border)',
                                     overflow: 'hidden',
+                                    cursor: 'pointer',
                                     transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                                 }}
                                 onMouseEnter={e => {
@@ -120,7 +127,7 @@ const Favourites = () => {
                                 </div>
 
                                 {/* Body */}
-                                <div style={{ padding: '1.25rem' }}>
+                                <div style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                                     <h3 style={{
                                         fontFamily: "'Cormorant Garant', serif",
                                         fontStyle: 'italic',
@@ -129,14 +136,25 @@ const Favourites = () => {
                                         color: 'var(--ink)',
                                         letterSpacing: '-0.01em',
                                         lineHeight: 1.1,
-                                        marginBottom: '1rem',
                                     }}>{favourite.name}</h3>
 
                                     <button
-                                        onClick={() => handleRemove(favourite.id)}
+                                        onClick={(e) => handleRemove(e, favourite.id)}
                                         className="btn-danger"
-                                        style={{ width: '100%', padding: '0.6rem', fontSize: '0.78rem' }}>
-                                        Remove from Favourites
+                                        title="Remove from favourites"
+                                        style={{
+                                            flexShrink: 0,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            padding: '0.6rem 0.7rem',
+                                        }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="3 6 5 6 21 6" />
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                            <line x1="10" y1="11" x2="10" y2="17" />
+                                            <line x1="14" y1="11" x2="14" y2="17" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>

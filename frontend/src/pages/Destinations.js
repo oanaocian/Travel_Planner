@@ -1,10 +1,12 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { destinationsService, favouritesService, reviewsService, recommendationsService } from "../services/api";
 import Map from '../components/Map';
 
 const Destinations = () => {
     const { user } = useContext(AuthContext);
+    const [searchParams, setSearchParams] = useSearchParams();
     const [destinations, setDestinations] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -22,6 +24,8 @@ const Destinations = () => {
     const [recommendations, setRecommendations] = useState([]);
     const [recommendationType, setRecommendationType] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [highlightedId, setHighlightedId] = useState(null);
+    const cardRefs = useRef({});
 
     const filteredDestinations = destinations.filter(d =>
         d.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -47,6 +51,32 @@ const Destinations = () => {
         };
         fetchDestinations();
     }, []);
+
+    // Scroll to and highlight a destination when arriving with ?highlight=ID
+    useEffect(() => {
+        const highlightId = searchParams.get('highlight');
+        if (!highlightId || destinations.length === 0) return;
+
+        const id = parseInt(highlightId);
+        let attempts = 0;
+
+        const tryScroll = () => {
+            const el = cardRefs.current[id];
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setHighlightedId(id);
+                setTimeout(() => setHighlightedId(null), 2400);
+                searchParams.delete('highlight');
+                setSearchParams(searchParams, { replace: true });
+            } else if (attempts < 20) {
+                attempts++;
+                setTimeout(tryScroll, 150);
+            }
+        };
+
+        tryScroll();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [destinations]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -309,8 +339,14 @@ const Destinations = () => {
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
                         {filteredDestinations.map((destination, i) => (
                             <div key={destination.id}
+                                ref={(el) => (cardRefs.current[destination.id] = el)}
                                 onClick={() => handleCardClick(destination)}
-                                className={`dest-card animate-fade-up delay-${Math.min(i + 1, 6)}`}>
+                                className={`dest-card animate-fade-up delay-${Math.min(i + 1, 6)}`}
+                                style={highlightedId === destination.id ? {
+                                    outline: '2px solid var(--gold)',
+                                    outlineOffset: '3px',
+                                    boxShadow: '0 12px 32px rgba(201,152,58,0.25)',
+                                } : {}}>
                                 <div className="dest-card-img">
                                     <img
                                         src={destination.image_url || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&h=300&fit=crop'}
@@ -468,7 +504,7 @@ const Destinations = () => {
                                                         onClick={() => handleDeleteReview(review.id)}
                                                         className="btn-danger"
                                                         style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }}>
-                                                        Delete
+                                                         🗑
                                                     </button>
                                                 )}
                                             </div>

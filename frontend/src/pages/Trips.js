@@ -247,7 +247,7 @@ const Trips = () => {
                                     onClick={(e) => handleDeleteTrip(e, trip.id)}
                                     className="btn-danger"
                                     style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem' }}>
-                                    🗑
+                                    Delete
                                 </button>
                                 <div style={{ color: 'var(--ink-faint)', fontSize: '1.25rem' }}>›</div>
                             </div>

@@ -134,16 +134,26 @@ const TripDetail = () => {
     const handleExportPDF = async () => {
         const doc = new jsPDF();
         let y = 20;
+
+        doc.setFont('helvetica', 'bold');
         doc.setFontSize(22);
         doc.setTextColor(30, 61, 43);
-        doc.text(trip.title, 20, y); y += 10;
-        doc.setFontSize(14);
+        doc.text(trip.title, 20, y); y += 9;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(13);
         doc.setTextColor(100, 100, 100);
-        doc.text(`${trip.destination_name}, ${trip.destination_country}`, 20, y); y += 8;
+        doc.text(`${trip.destination_name}, ${trip.destination_country}`, 20, y); y += 9;
+
         doc.setFontSize(11);
-        doc.text(`Dates: ${formatDate(trip.start_date)} → ${formatDate(trip.end_date)}`, 20, y); y += 8;
-        doc.text(`Currency: ${trip.currency}`, 20, y); y += 8;
-        if (trip.description) { doc.text(`Description: ${trip.description}`, 20, y); y += 8; }
+        doc.setTextColor(80, 80, 80);
+        doc.text(`Dates:  ${formatDate(trip.start_date)}  -  ${formatDate(trip.end_date)}`, 20, y); y += 6;
+        doc.text(`Currency:  ${trip.currency}`, 20, y); y += 6;
+        if (trip.description) {
+            const descLines = doc.splitTextToSize(`Description:  ${trip.description}`, 170);
+            doc.text(descLines, 20, y);
+            y += descLines.length * 6;
+        }
         y += 4;
         doc.setDrawColor(30, 61, 43);
         doc.line(20, y, 190, y); y += 10;

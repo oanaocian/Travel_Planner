@@ -35,7 +35,7 @@ const Navbar = () => {
                 letterSpacing: '-0.02em',
                 flexShrink: 0,
             }}>
-                Travel<span style={{ color: 'var(--gold)' }}>.</span>
+                Exploro<span style={{ color: 'var(--gold)' }}></span>
             </Link>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'nowrap' }}>
